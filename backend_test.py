@@ -188,10 +188,10 @@ class NFTMarketplaceTests(unittest.TestCase):
                 self.assertEqual(nft["collection"], collection_name)
         
         # Test filtering by status
-        response = requests.get(f"{BASE_URL}/nfts?status={NFTStatus.LISTED}")
+        response = requests.get(f"{BASE_URL}/nfts?status=listed")
         self.assertEqual(response.status_code, 200)
         status_results = response.json()
-        print(f"✅ Filter by status '{NFTStatus.LISTED}' returned {len(status_results)} results")
+        print(f"✅ Filter by status 'listed' returned {len(status_results)} results")
         
         # Verify all NFTs have the specified status
         for nft in status_results:
