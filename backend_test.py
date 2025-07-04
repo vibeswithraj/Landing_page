@@ -23,6 +23,8 @@ class TransactionStatus(str, Enum):
 class NFTMarketplaceTests(unittest.TestCase):
     """Test suite for NFT Marketplace API"""
     
+    test_nft = None
+    
     @classmethod
     def setUpClass(cls):
         """Initialize test data"""
@@ -52,6 +54,26 @@ class NFTMarketplaceTests(unittest.TestCase):
         }
         cls.test_user = requests.post(f"{BASE_URL}/users", json=user_data).json()
         print(f"Created test user: {cls.test_user['username']} (ID: {cls.test_user['id']})")
+        
+        # Create a test NFT for later tests
+        if cls.collections:
+            nft_data = {
+                "name": "Test NFT",
+                "description": "Created during API testing",
+                "image_url": "https://images.unsplash.com/photo-1635377090186-036bca445c6b",
+                "price": 1.5,
+                "collection": cls.collections[0]["name"],
+                "traits": [
+                    {"trait_type": "Test", "value": "API Testing"}
+                ]
+            }
+            
+            response = requests.post(f"{BASE_URL}/nfts", json=nft_data)
+            if response.status_code == 200:
+                cls.test_nft = response.json()
+                print(f"Created test NFT: {cls.test_nft['name']} (ID: {cls.test_nft['id']})")
+            else:
+                print(f"❌ Failed to create test NFT: {response.status_code} - {response.text}")
     
     def test_01_root_endpoint(self):
         """Test the root API endpoint"""
